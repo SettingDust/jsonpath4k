@@ -16,7 +16,8 @@ This is a Kotlin Multiplatform Library for using Json Paths as specified in [RFC
 
 ## Architecture
 
-This library was built with [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) and [Multiplatform Mobile](https://kotlinlang.org/lp/mobile/) in mind. Its primary targets are JVM, Android and iOS. 
+This library was built for [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) targeting JVM/Android and iOS. Other targets might work, but are
+not tested or even built.
 
 Notable features for multiplatform are:
 
