@@ -1,13 +1,10 @@
 import com.strumenta.antlrkotlin.gradle.AntlrKotlinTask
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.MetadataDependencyTransformationTask
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFrameworkConfig
 
 plugins {
@@ -96,10 +93,10 @@ kotlin.sourceSets.apply {
 }
 
 
-exportIosFramework("JsonPath")
+exportIosFramework("JsonPath4K")
 
 val javadocJar = setupDokka(
-    baseUrl = "https://github.com/a-sit-plus/jsonpath/tree/main/",
+    baseUrl = "https://github.com/a-sit-plus/jsonpath4k/tree/main/",
     multiModuleDoc = false
 )
 
@@ -108,9 +105,9 @@ publishing {
         withType<MavenPublication> {
             artifact(javadocJar)
             pom {
-                name.set("JsonPath")
+                name.set("JsonPath4K")
                 description.set("Kotlin Multiplatform library for using Json Paths as specified in [RFC9535](https://datatracker.ietf.org/doc/rfc9535/)")
-                url.set("https://github.com/a-sit-plus/jsonpath")
+                url.set("https://github.com/a-sit-plus/jsonpath4k")
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
@@ -119,7 +116,7 @@ publishing {
                 }
                 developers {
                     developer {
-                        id.set("acrusage") //may or may not work when publishing
+                        id.set("acrusage")
                         name.set("Stefan Kreiner")
                         email.set("stefan.kreiner@iaik.tugraz.at")
                     }
@@ -135,13 +132,33 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git@github.com:a-sit-plus/jsonpath.git")
-                    developerConnection.set("scm:git:git@github.com:a-sit-plus/jsonpath.git")
-                    url.set("https://github.com/a-sit-plus/jsonpath")
+                    connection.set("scm:git:git@github.com:a-sit-plus/jsonpath4k.git")
+                    developerConnection.set("scm:git:git@github.com:a-sit-plus/jsonpath4k.git")
+                    url.set("https://github.com/a-sit-plus/jsonpath4k")
+                }
+            }
+        }
+
+        //REMOVE ME AFTER REBRANDED ARTIFACT HAS BEEN PUBLISHED
+        create<MavenPublication>("relocation") {
+            pom {
+                // Old artifact coordinates
+                groupId = "at.asitplus"
+                artifactId = "jsonpath"
+                version = "$version"
+
+                distributionManagement {
+                    relocation {
+                        // New artifact coordinates
+                        artifactId = "jsonpath4k"
+                        version = "$version"
+                        message = "artifactId has been changed"
+                    }
                 }
             }
         }
     }
+
     repositories {
         mavenLocal {
             signing.isRequired = false
