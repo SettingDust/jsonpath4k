@@ -4,12 +4,13 @@ kotest = "5.8.1"
 jetbrains-kotlin = "1.9.23"
 jetbrains-kotlinx-serialization = "1.6.3"
 jetbrains-dokka = "1.9.20"
-napier = "2.7.1"
+kotlin-logging = "7.0.0"
 gradle-nexus-publish = "2.0.0"
 
 [libraries]
 antlr-kotlin = { group = "com.strumenta", name = "antlr-kotlin-runtime", version.ref = "antlr-kotlin" }
-napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlin-logging" }
+kotlin-logging-jvm = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
 
 kotest-common = { module = "io.kotest:kotest-common", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }

@@ -1,13 +1,10 @@
 import com.strumenta.antlrkotlin.gradle.AntlrKotlinTask
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.MetadataDependencyTransformationTask
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFrameworkConfig
 
 plugins {
@@ -36,14 +33,14 @@ kotlin {
     iosSimulatorArm64()
     iosX64()
 
-    jvmToolchain(17)
+    jvmToolchain(8)
 
     sourceSets {
         commonMain {
             dependencies {
                 implementation(libs.antlr.kotlin)
                 implementation(libs.jetbrains.kotlinx.serialization)
-                implementation(libs.napier)
+                implementation(libs.kotlin.logging)
             }
         }
         commonTest {
@@ -57,9 +54,15 @@ kotlin {
             }
         }
 
+        jvmMain {
+            dependencies {
+                implementation("org.slf4j:slf4j-api:2.0.13")
+            }
+        }
         jvmTest {
             dependencies {
                 implementation(libs.kotest.runner.junit5)
+                implementation("org.slf4j:slf4j-simple:2.0.13")
             }
         }
     }

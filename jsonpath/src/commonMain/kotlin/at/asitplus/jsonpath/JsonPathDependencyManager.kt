@@ -3,14 +3,14 @@ package at.asitplus.jsonpath
 import at.asitplus.jsonpath.core.JsonPathCompiler
 import at.asitplus.jsonpath.core.JsonPathFilterExpressionType
 import at.asitplus.jsonpath.core.JsonPathFunctionExtension
+import at.asitplus.jsonpath.core.functionExtensions.countFunctionExtension
 import at.asitplus.jsonpath.core.functionExtensions.lengthFunctionExtension
 import at.asitplus.jsonpath.core.functionExtensions.matchFunctionExtension
 import at.asitplus.jsonpath.core.functionExtensions.searchFunctionExtension
 import at.asitplus.jsonpath.core.functionExtensions.valueFunctionExtension
-import at.asitplus.jsonpath.core.functionExtensions.countFunctionExtension
 import at.asitplus.jsonpath.implementation.AntlrJsonPathCompiler
 import at.asitplus.jsonpath.implementation.AntlrJsonPathCompilerErrorListener
-import io.github.aakira.napier.Napier
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.antlr.v4.kotlinruntime.BaseErrorListener
 import org.antlr.v4.kotlinruntime.RecognitionException
 import org.antlr.v4.kotlinruntime.Recognizer
@@ -31,26 +31,28 @@ object JsonPathDependencyManager {
         )
 
     var compiler: JsonPathCompiler = AntlrJsonPathCompiler(
-        errorListener = napierAntlrJsonPathCompilerErrorListener,
+        errorListener = kotlinLoggingAntlrJsonPathCompilerErrorListener,
     )
 }
 
-private val napierAntlrJsonPathCompilerErrorListener by lazy {
+private val kotlinLoggingAntlrJsonPathCompilerErrorListener by lazy {
     object : AntlrJsonPathCompilerErrorListener, BaseErrorListener() {
+        private val logger = KotlinLogging.logger {}
+
         override fun unknownFunctionExtension(functionExtensionName: String) {
-            Napier.e {
+            logger.error {
                 "Unknown JSONPath function extension: \"$functionExtensionName\""
             }
         }
 
         override fun invalidFunctionExtensionForTestExpression(functionExtensionName: String) {
-            Napier.e {
+            logger.error {
                 "Invalid JSONPath function extension return type for test expression: \"$functionExtensionName\""
             }
         }
 
         override fun invalidFunctionExtensionForComparable(functionExtensionName: String) {
-            Napier.e {
+            logger.error {
                 "Invalid JSONPath function extension return type for comparable expression: \"$functionExtensionName\""
             }
         }
@@ -60,7 +62,7 @@ private val napierAntlrJsonPathCompilerErrorListener by lazy {
             functionExtensionImplementation: JsonPathFunctionExtension<*>,
             coercedArgumentTypes: List<Pair<JsonPathFilterExpressionType?, String>>
         ) {
-            Napier.e {
+            logger.error {
                 "Invalid arguments for function extension \"$functionExtensionName\": Expected: <${
                     functionExtensionImplementation.argumentTypes.joinToString(
                         ", "
@@ -72,7 +74,7 @@ private val napierAntlrJsonPathCompilerErrorListener by lazy {
         }
 
         override fun invalidTestExpression(testContextString: String) {
-            Napier.e {
+            logger.error {
                 "Invalid test expression: $testContextString"
             }
         }
@@ -85,7 +87,7 @@ private val napierAntlrJsonPathCompilerErrorListener by lazy {
             msg: String,
             e: RecognitionException?
         ) {
-            Napier.e {
+            logger.error {
                 "Syntax error $line:$charPositionInLine $msg"
             }
         }
